@@ -6,7 +6,7 @@ class HomeScreen extends StatelessWidget {
   HomeScreen({super.key});
 
   //elegant way to fetch data from api in stateless widget
-  Future<List<WebtoonModel>> webtoons = ApiService().getTodaysToons();
+  final Future<List<WebtoonModel>> webtoons = ApiService().getTodaysToons();
 
   @override
   Widget build(BuildContext context) {
@@ -28,9 +28,22 @@ class HomeScreen extends StatelessWidget {
           future: webtoons,
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              return const Text('Data found');
+              return ListView.separated(
+                scrollDirection: Axis.horizontal,
+                itemCount: snapshot.data!.length,
+                itemBuilder: (context, idx) {
+                  final webtoon = snapshot.data![idx];
+                  print(webtoon.title);
+                  return Text(webtoon.title);
+                },
+                separatorBuilder: (context, idx) => const SizedBox(
+                  width: 16,
+                ),
+              );
             }
-            return const Text('Loading...');
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
           },
         ));
   }
