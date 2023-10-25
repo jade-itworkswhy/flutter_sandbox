@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:webtoon_naver_app/models/webtoon_model.dart';
 import 'package:webtoon_naver_app/services/api_service.dart';
+import 'package:webtoon_naver_app/widgets/webtoon_widget.dart';
 
 class HomeScreen extends StatelessWidget {
   HomeScreen({super.key});
@@ -28,17 +29,13 @@ class HomeScreen extends StatelessWidget {
           future: webtoons,
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              return ListView.separated(
-                scrollDirection: Axis.horizontal,
-                itemCount: snapshot.data!.length,
-                itemBuilder: (context, idx) {
-                  final webtoon = snapshot.data![idx];
-                  print(webtoon.title);
-                  return Text(webtoon.title);
-                },
-                separatorBuilder: (context, idx) => const SizedBox(
-                  width: 16,
-                ),
+              return Column(
+                children: [
+                  const SizedBox(
+                    height: 50,
+                  ),
+                  Expanded(child: makeList(snapshot))
+                ],
               );
             }
             return const Center(
@@ -46,5 +43,24 @@ class HomeScreen extends StatelessWidget {
             );
           },
         ));
+  }
+
+  ListView makeList(AsyncSnapshot<List<WebtoonModel>> snapshot) {
+    return ListView.separated(
+      scrollDirection: Axis.horizontal,
+      itemCount: snapshot.data!.length,
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      itemBuilder: (context, idx) {
+        final webtoon = snapshot.data![idx];
+        return Webtoon(
+          title: webtoon.title,
+          thumb: webtoon.thumb,
+          id: webtoon.id,
+        );
+      },
+      separatorBuilder: (context, idx) => const SizedBox(
+        width: 16,
+      ),
+    );
   }
 }
