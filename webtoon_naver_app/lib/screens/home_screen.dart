@@ -7,7 +7,7 @@ class HomeScreen extends StatelessWidget {
   HomeScreen({super.key});
 
   //elegant way to fetch data from api in stateless widget
-  final Future<List<WebtoonModel>> webtoons = ApiService().getTodaysToons();
+  final Future<List<WebtoonModel>> webtoons = ApiService.getTodaysToons();
 
   @override
   Widget build(BuildContext context) {
